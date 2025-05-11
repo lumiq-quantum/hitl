@@ -1,0 +1,5 @@
+So let me give you some more context about the application, we are building it as a saas service which will be used by companies which are building the agentic workflow of their own and deligate the task of Human In the loop to external system which we are building.
+
+So the flow is like, Agents (Managed buy the user of our saas application) will start thier own session to complete some task of their own, and as n when they require some human intervention like confirmation or user input they will handoff this task to our application, when they will hand off they will provide us the, session_id of thier agent run, Question they want to ask from the human along with its nature (confirmation / approvals or input) and the user persona of human to ask the question to
+
+Then it is our application job to decide which human to ask the question to and on which channel accroding to the configuration on our system and when the user will respond to the question asked on the corresponding channel our application job is to send signal to the external agent to resume their session using the session_id provided at the time on invocation.

@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+*.env
+*.venv
+*.egg-info/
+.Python
+
+# Alembic
+alembic/versions/__pycache__/
+alembic/versions/*.pyc
+
+# VSCode/IDE
+.idea/
+.vscode/
+
+# macOS
+.DS_Store
+
+# Docker/Postgres
+g_pg_data/
+pg_data/
+*.pid
+
+# Logs
+*.log
+
+# System
+*.swp
