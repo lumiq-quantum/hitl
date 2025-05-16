@@ -1,0 +1,29 @@
+<div id="panel-user-channels" class="settings-panel" style="display:none">
+  <h2>User-Channel Mapping</h2>
+  <form class="map-form" id="user-channel-form">
+    <div class="form-group">
+      <label for="map-user">User</label>
+      <select id="map-user" required></select>
+    </div>
+    <div class="form-group">
+      <label for="map-channel">Channel</label>
+      <select id="map-channel" required></select>
+    </div>
+    <div class="form-group">
+      <label for="map-contact">Contact Details</label>
+      <div id="contact-details-fields"></div>
+    </div>
+    <div class="form-group">
+      <label for="map-default">Default</label>
+      <input type="checkbox" id="map-default">
+    </div>
+    <button type="submit" class="btn-primary">Map</button>
+  </form>
+  <table id="user-channels-table" class="styled-table">
+    <thead>
+      <tr><th>User</th><th>Channel</th><th>Contact Details</th><th>Default</th><th>Actions</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <div id="msg"></div>
+</div>

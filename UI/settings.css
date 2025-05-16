@@ -1,0 +1,73 @@
+body { font-family: Arial, sans-serif; margin: 0; background: #f7f7f7; }
+.sidebar-container { display: flex; min-height: 100vh; }
+.sidebar { width: 220px; background: #222; color: #fff; padding: 0; }
+.sidebar ul { list-style: none; margin: 0; padding: 0; }
+.sidebar li { border-bottom: 1px solid #333; }
+.sidebar a { display: block; color: #fff; text-decoration: none; padding: 16px 20px; transition: background 0.2s; }
+.sidebar a:hover, .sidebar a.active { background: #1976d2; }
+.main-content { flex: 1; padding: 32px; background: #fff; }
+.settings-panel { max-width: 900px; margin: 0 auto; }
+h2 { margin-top: 32px; }
+form { margin-bottom: 16px; }
+label { display: block; margin: 8px 0 2px; }
+input, select, textarea { width: 100%; padding: 6px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; }
+button { padding: 6px 16px; border: none; border-radius: 4px; background: #1976d2; color: #fff; cursor: pointer; }
+button.danger { background: #d32f2f; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+th, td { border: 1px solid #eee; padding: 6px 8px; text-align: left; }
+th { background: #f0f0f0; }
+.default { color: #388e3c; font-weight: bold; }
+.actions button { margin-right: 4px; }
+.map-form { display: flex; gap: 8px; align-items: flex-end; }
+.map-form select { width: auto; }
+.success { color: #388e3c; }
+.error { color: #d32f2f; }
+
+/* Enhance the user-channel mapping page styles */
+#panel-user-channels {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+#panel-user-channels h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 16px;
+}
+#panel-user-channels .map-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+#panel-user-channels .map-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+#panel-user-channels .map-form label {
+  font-weight: bold;
+  color: #555;
+}
+#panel-user-channels .map-form input,
+#panel-user-channels .map-form select {
+  width: 100%;
+  max-width: 400px;
+}
+#panel-user-channels table {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+#panel-user-channels table th {
+  background: #f9f9f9;
+  font-weight: bold;
+  color: #555;
+}
+#panel-user-channels table td {
+  background: #fff;
+}
+#panel-user-channels .actions button {
+  margin-right: 8px;
+}

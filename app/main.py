@@ -1,7 +1,16 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import handoff, question, response, user, channel, user_channel
 
 app = FastAPI(title="HITL Workflow")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(handoff.router, prefix="/handoff", tags=["handoff"])
 app.include_router(question.router, prefix="/questions", tags=["questions"])

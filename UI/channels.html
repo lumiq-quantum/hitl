@@ -1,0 +1,29 @@
+<div id="panel-channels" class="settings-panel">
+  <h2>Channels</h2>
+  <form id="channel-form">
+    <input type="hidden" id="channel-id">
+    <label>Name</label>
+    <input type="text" id="channel-name" required>
+    <label>Type</label>
+    <select id="channel-type" required>
+      <option value="">Select type</option>
+      <option>discord</option>
+      <option>gmail</option>
+      <option>google chat</option>
+      <option>microsoft outlook</option>
+      <option>microsoft teams</option>
+      <option>email</option>
+      <option>slack</option>
+      <option>telegram</option>
+      <option>whatsapp</option>
+    </select>
+    <div id="channel-config-fields"></div>
+    <button type="submit">Save Channel</button>
+  </form>
+  <table id="channels-table">
+    <thead>
+      <tr><th>Name</th><th>Type</th><th>Config</th><th>Actions</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
