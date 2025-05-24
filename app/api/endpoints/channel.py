@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session as DBSession
 from app import models, schemas, db
 from typing import Dict
@@ -41,8 +41,16 @@ def create_channel(channel_in: schemas.ChannelCreate, db_session: DBSession = De
     return channel_obj
 
 @router.get("/", response_model=list[schemas.ChannelOut])
-def list_channels(db_session: DBSession = Depends(db.get_db)):
-    return db_session.query(models.Channel).all()
+def list_channels(
+    db_session: DBSession = Depends(db.get_db),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=100),
+    search: str = Query(None)
+):
+    query = db_session.query(models.Channel)
+    if search:
+        query = query.filter(models.Channel.name.ilike(f"%{search}%"))
+    return query.offset(skip).limit(limit).all()
 
 @router.get("/{channel_id}", response_model=schemas.ChannelOut)
 def get_channel(channel_id: int, db_session: DBSession = Depends(db.get_db)):

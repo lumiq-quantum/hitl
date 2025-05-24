@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session as DBSession
 from app import models, schemas, db
 
@@ -23,8 +23,16 @@ def create_user(user_in: schemas.UserCreate, db_session: DBSession = Depends(db.
     return user_obj
 
 @router.get("/", response_model=list[schemas.UserOut])
-def list_users(db_session: DBSession = Depends(db.get_db)):
-    return db_session.query(models.User).all()
+def list_users(
+    db_session: DBSession = Depends(db.get_db),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, ge=1, le=100),
+    search: str = Query(None)
+):
+    query = db_session.query(models.User)
+    if search:
+        query = query.filter(models.User.name.ilike(f"%{search}%"))
+    return query.offset(skip).limit(limit).all()
 
 @router.get("/{user_id}", response_model=schemas.UserOut)
 def get_user(user_id: int, db_session: DBSession = Depends(db.get_db)):
