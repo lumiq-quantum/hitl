@@ -74,7 +74,7 @@ def handoff(
     # Call the external service
     try:
         resp = requests.post(
-            "https://n8n.codeshare.live/webhook-test/handoff",
+            "https://n8n.codeshare.live/webhook/handoff",
             json=payload,
             timeout=10
         )
