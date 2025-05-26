@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session as DBSession
 from uuid import uuid4
 from datetime import datetime
@@ -10,17 +10,16 @@ import requests
 router = APIRouter()
 
 class HandoffRequest(BaseModel):
-    external_session_id: str
+    session_info: dict  # Replace external_session_id with session_info
     question_text: str
-    answer_type: str
-    persona: str
-    possible_answers: Optional[List[str]] = None
+    persona: str  # Keep persona as requested
 
 @router.post("/")
 def handoff(
     handoff_in: HandoffRequest,
     db_session: DBSession = Depends(db.get_db)
 ):
+    print(f"handoff: {handoff_in}")
     # Find a user matching the persona
     user = db_session.query(models.User).filter_by(persona=handoff_in.persona).first()
     if not user:
@@ -31,7 +30,7 @@ def handoff(
         user_id=user.id,
         current_step=0,
         status="active",
-        external_session_id=handoff_in.external_session_id,
+        session_info=handoff_in.session_info,  # Store session_info as JSONB
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -40,8 +39,6 @@ def handoff(
     # Create question
     question_obj = models.Question(
         question_text=handoff_in.question_text,
-        answer_type=handoff_in.answer_type,
-        possible_answers=handoff_in.possible_answers,
         created_at=datetime.utcnow()
     )
     db_session.add(question_obj)
@@ -65,10 +62,9 @@ def handoff(
     payload = {
         "session_id": str(session_obj.id),
         "session_question_id": session_question.id,
-        "external_session_id": handoff_in.external_session_id,
+        "external_session_info": handoff_in.session_info,
         "question_text": handoff_in.question_text,
-        "answer_type": handoff_in.answer_type,
-        "possible_answers": handoff_in.possible_answers,
+        "persona": handoff_in.persona,
         "channel_type": user_channel.channel.type,
         "channel_config": user_channel.channel.config,
         "user_contact_details": user_channel.contact_details,
@@ -78,7 +74,7 @@ def handoff(
     # Call the external service
     try:
         resp = requests.post(
-            "https://n8n.codeshare.live/webhook/slack-handoff",
+            "https://n8n.codeshare.live/webhook-test/handoff",
             json=payload,
             timeout=10
         )

@@ -35,8 +35,6 @@ class Question(Base):
     id = Column(Integer, primary_key=True)
     agent_id = Column(Integer, ForeignKey('agents.id'))
     question_text = Column(Text, nullable=False)
-    answer_type = Column(String(50), nullable=False)
-    possible_answers = Column(ARRAY(Text))
     created_at = Column(DateTime, default=datetime.utcnow)
     agent = relationship("Agent", back_populates="questions")
 
@@ -70,10 +68,10 @@ class UserChannel(Base):
 class Session(Base):
     __tablename__ = 'sessions'
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    external_session_id = Column(String(255), nullable=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     current_step = Column(Integer, default=0)
     status = Column(String(50), default="active")
+    session_info = Column(JSONB, nullable=True)  # Replace external_session_id with session_info
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow)
     user = relationship("User")

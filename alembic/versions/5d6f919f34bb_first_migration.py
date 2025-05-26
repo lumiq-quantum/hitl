@@ -1,8 +1,8 @@
-"""Initial tables
+"""First Migration
 
-Revision ID: 9b1031dfcb65
+Revision ID: 5d6f919f34bb
 Revises: 
-Create Date: 2025-05-02 03:28:35.436118
+Create Date: 2025-05-27 00:05:59.182580
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = '9b1031dfcb65'
+revision: str = '5d6f919f34bb'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -31,6 +31,8 @@ def upgrade() -> None:
     op.create_table('channels',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=True),
+    sa.Column('type', sa.String(length=50), nullable=False),
+    sa.Column('config', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
@@ -40,36 +42,40 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('questions',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('agent_id', sa.Integer(), nullable=True),
-    sa.Column('question_text', sa.Text(), nullable=False),
-    sa.Column('answer_type', sa.String(length=50), nullable=False),
-    sa.Column('possible_answers', sa.ARRAY(sa.Text()), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['agent_id'], ['agents.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=True),
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('phone', sa.String(length=50), nullable=True),
-    sa.Column('preferred_channel_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['preferred_channel_id'], ['channels.id'], ),
+    sa.Column('persona', sa.String(length=100), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('questions',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('agent_id', sa.Integer(), nullable=True),
+    sa.Column('question_text', sa.Text(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.ForeignKeyConstraint(['agent_id'], ['agents.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('sessions',
     sa.Column('id', sa.UUID(), nullable=False),
-    sa.Column('agent_id', sa.Integer(), nullable=True),
-    sa.Column('context_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('current_step', sa.Integer(), nullable=True),
     sa.Column('status', sa.String(length=50), nullable=True),
+    sa.Column('session_info', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['agent_id'], ['agents.id'], ),
-    sa.ForeignKeyConstraint(['context_id'], ['contexts.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('user_channels',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('channel_id', sa.Integer(), nullable=True),
+    sa.Column('contact_details', postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+    sa.Column('is_preferred', sa.Boolean(), nullable=True),
+    sa.ForeignKeyConstraint(['channel_id'], ['channels.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -115,9 +121,10 @@ def downgrade() -> None:
     op.drop_table('reminders')
     op.drop_table('session_questions')
     op.drop_table('hitl_logs')
+    op.drop_table('user_channels')
     op.drop_table('sessions')
-    op.drop_table('users')
     op.drop_table('questions')
+    op.drop_table('users')
     op.drop_table('contexts')
     op.drop_table('channels')
     op.drop_table('agents')
