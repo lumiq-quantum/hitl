@@ -49,6 +49,9 @@ def submit_response(
             timeout=10
         )
         resp.raise_for_status()
+        print(f"Payload sent to external system: {payload}")
+        print(f"Response from external system: {resp}")
+        print(f"Response from external system: {resp.json()}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to notify external system: {str(e)}")
 
